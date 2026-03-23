@@ -47,6 +47,13 @@ export const getConversations = async (req, res, next) => {
 // GET /api/conversations/:id/messages
 export const getMessages = async (req, res, next) => {
     try {
+        // Verify the user is a participant of this conversation
+        const conversation = await Conversation.findById(req.params.id);
+        if (!conversation) return res.status(404).json({ message: 'Conversation not found.' });
+        if (!conversation.participants.some(p => p.toString() === req.user._id.toString())) {
+            return res.status(403).json({ message: 'Access denied. You are not part of this conversation.' });
+        }
+
         const messages = await Message.find({ conversation: req.params.id })
             .sort({ createdAt: 1 });
 
@@ -70,6 +77,9 @@ export const sendMessage = async (req, res, next) => {
 
         const conversation = await Conversation.findById(conversationId);
         if (!conversation) return res.status(404).json({ message: 'Conversation not found.' });
+        if (!conversation.participants.some(p => p.toString() === req.user._id.toString())) {
+            return res.status(403).json({ message: 'Access denied. You are not part of this conversation.' });
+        }
 
         const message = new Message({
             conversation: conversationId,

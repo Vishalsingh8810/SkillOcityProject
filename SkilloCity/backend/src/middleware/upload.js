@@ -1,26 +1,13 @@
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import config from '../config/env.js';
 
-// Ensure upload directory exists
-const uploadDir = path.join(process.cwd(), config.uploadDir);
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const subDir = file.fieldname === 'avatar' ? 'avatars' : 'attachments';
-        const dir = path.join(uploadDir, subDir);
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-        cb(null, dir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        const ext = path.extname(file.originalname);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-    },
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: config.cloudinary.cloudName,
+    api_key: config.cloudinary.apiKey,
+    api_secret: config.cloudinary.apiSecret
 });
 
 const fileFilter = (req, file, cb) => {
@@ -42,6 +29,20 @@ const fileFilter = (req, file, cb) => {
         }
     }
 };
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+        let folder = 'skillocity_attachments';
+        if (file.fieldname === 'avatar') {
+            folder = 'skillocity_avatars';
+        }
+        return {
+            folder: folder,
+            resource_type: "auto", // Allow images, pdfs, docs, etc.
+        };
+    },
+});
 
 export const upload = multer({
     storage,

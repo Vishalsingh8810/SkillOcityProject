@@ -39,7 +39,8 @@ export const uploadAvatar = async (req, res, next) => {
             return res.status(400).json({ message: 'No file uploaded.' });
         }
 
-        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        // Cloudinary stores the URL in req.file.path
+        const avatarUrl = req.file.path;
         const user = await User.findByIdAndUpdate(
             req.user._id,
             { avatar: avatarUrl },

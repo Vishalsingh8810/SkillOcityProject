@@ -56,9 +56,9 @@ export const createRequest = async (req, res, next) => {
             dayPreference: dayPreference || 'any',
         });
 
-        // Handle attachment if uploaded
+        // Handle attachment if uploaded (Cloudinary stores URL in req.file.path)
         if (req.file) {
-            request.attachment = `/uploads/attachments/${req.file.filename}`;
+            request.attachment = req.file.path;
         }
 
         await request.save();

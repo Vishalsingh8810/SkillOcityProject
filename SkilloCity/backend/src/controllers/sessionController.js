@@ -42,6 +42,12 @@ export const getSessionById = async (req, res, next) => {
 
         if (!session) return res.status(404).json({ message: 'Session not found.' });
 
+        // Ownership check: only the student or teacher of this session can view it
+        const userId = req.user._id.toString();
+        if (session.student?._id.toString() !== userId && session.teacher?._id.toString() !== userId) {
+            return res.status(403).json({ message: 'Access denied. You are not part of this session.' });
+        }
+
         const sJson = session.toJSON();
         if (session.student) {
             sJson.student = { id: session.student._id, name: `${session.student.firstName} ${session.student.lastName}`, avatar: session.student.avatar };
@@ -62,6 +68,12 @@ export const cancelSession = async (req, res, next) => {
         const session = await Session.findById(req.params.id);
         if (!session) return res.status(404).json({ message: 'Session not found.' });
 
+        // Ownership check: only the student or teacher of this session can cancel it
+        const userId = req.user._id.toString();
+        if (session.student.toString() !== userId && session.teacher.toString() !== userId) {
+            return res.status(403).json({ message: 'Access denied. You are not part of this session.' });
+        }
+
         if (session.status === 'completed' || session.status === 'cancelled') {
             return res.status(400).json({ message: 'Cannot cancel this session.' });
         }
@@ -81,6 +93,12 @@ export const addNotes = async (req, res, next) => {
         const { notes } = req.body;
         const session = await Session.findById(req.params.id);
         if (!session) return res.status(404).json({ message: 'Session not found.' });
+
+        // Ownership check: only the student or teacher of this session can add notes
+        const userId = req.user._id.toString();
+        if (session.student.toString() !== userId && session.teacher.toString() !== userId) {
+            return res.status(403).json({ message: 'Access denied. You are not part of this session.' });
+        }
 
         session.notes = notes;
         await session.save();
