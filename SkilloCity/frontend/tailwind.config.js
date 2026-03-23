@@ -7,21 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Pure typography minimalist palette
+        // Modern Vibrant Tech Palette (Indigo base)
         primary: {
-          DEFAULT: '#09090B',   // zinc-950
-          dark: '#000000',      // pitch black
-          light: '#F4F4F5',     // zinc-100
+          DEFAULT: '#4F46E5',   // indigo-600
+          dark: '#4338CA',      // indigo-700
+          light: '#EEF2FF',     // indigo-50
         },
         accent: {
-          DEFAULT: '#09090B',   // we map accent to primary in this theme
-          light: '#F4F4F5',
+          DEFAULT: '#8B5CF6',   // violet-500
+          light: '#F5F3FF',     // violet-50
         },
-        bg: '#FAFAFA',
+        bg: '#F8FAFC',          // slate-50
         surface: '#FFFFFF',
-        text: '#09090B',
-        muted: '#71717A',
-        border: '#E4E4E7',
+        text: '#0F172A',        // slate-900
+        muted: '#64748B',       // slate-500
+        border: '#E2E8F0',      // slate-200
         success: {
           DEFAULT: '#10B981',
           light: '#ECFDF5',

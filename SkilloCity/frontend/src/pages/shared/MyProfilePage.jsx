@@ -69,18 +69,13 @@ export default function MyProfilePage() {
                 {/* ─── Profile Header ─── */}
                 <div className="card-premium overflow-hidden mb-8 p-0 border-0 shadow-lg">
                     {/* Gradient banner */}
-                    <div
-                        className="h-48 relative border-b border-border/20 z-0"
-                        style={{
-                            background: 'linear-gradient(135deg, #1A1A2E 0%, #2D2B55 40%, #FF6B35 100%)',
-                        }}
-                    >
+                    <div className="h-48 relative border-b border-black/[0.05] z-0 bg-gradient-to-tr from-indigo-950 via-primary to-orange-500">
                          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                            <div className="absolute -top-10 -right-10 w-64 h-64 bg-accent/40 rounded-full blur-3xl animate-pulse-slow" />
-                            <div className="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-primary/40 rounded-full blur-2xl flex" />
-                            <div className="absolute inset-0 opacity-[0.05]" style={{
+                            <div className="absolute -top-10 -right-10 w-64 h-64 bg-accent/40 rounded-full blur-3xl animate-pulse-slow max-w-full" />
+                            <div className="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-white/10 rounded-full blur-2xl flex max-w-full" />
+                            <div className="absolute inset-0 opacity-[0.08]" style={{
                                 backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                                backgroundSize: '16px 16px'
+                                backgroundSize: '24px 24px'
                             }} />
                         </div>
                     </div>
@@ -160,8 +155,8 @@ export default function MyProfilePage() {
                 {/* ─── Stats Grid ─── */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     {stats.map((stat, i) => (
-                        <div key={i} className="card-premium p-5 flex flex-col items-center justify-center text-center shadow-sm hover:-translate-y-1 transition-transform group">
-                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-3 shadow-sm group-hover:shadow-md transition-shadow ${stat.gradient}`}>
+                        <div key={i} className="card-premium bg-white/70 backdrop-blur-md p-5 flex flex-col items-center justify-center text-center shadow-sm hover:-translate-y-1 hover:shadow-md transition-all group ring-1 ring-black/5">
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-3 shadow-sm group-hover:scale-110 transition-transform ${stat.gradient}`}>
                                 {stat.icon}
                             </div>
                             <div className="text-2xl font-bold text-text mb-0.5">{stat.value}</div>
@@ -171,14 +166,14 @@ export default function MyProfilePage() {
                 </div>
 
                 {/* ─── Tab Navigation ─── */}
-                <div className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden p-1.5 flex gap-1 mb-6">
+                <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-black/[0.04] shadow-sm overflow-hidden p-1.5 flex gap-1 mb-6 ring-1 ring-white/50">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => { setActiveTab(tab.id); if(tab.id==='overview') setIsEditing(false); else setIsEditing(true); }}
-                            className={`flex-1 py-3 px-4 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${activeTab === tab.id
-                                    ? 'bg-text text-white shadow-sm'
-                                    : 'text-muted hover:text-text hover:bg-gray-50'
+                            className={`flex-1 py-3 px-4 text-sm font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border ${activeTab === tab.id
+                                    ? 'bg-primary text-white shadow-sm border-transparent'
+                                    : 'text-muted hover:text-text hover:bg-white/50 border-transparent'
                                 }`}
                         >
                             <span>{tab.icon}</span> {tab.label}
@@ -189,7 +184,7 @@ export default function MyProfilePage() {
                 <div className="pb-10">
                     {/* ── Overview Tab ── */}
                     {activeTab === 'overview' && (
-                        <div className="card-premium space-y-8 animate-fade-in shadow-sm">
+                        <div className="card-premium bg-white/70 backdrop-blur-md space-y-8 animate-fade-in shadow-sm ring-1 ring-black/5">
                             {/* About */}
                             <div>
                                 <h3 className="section-title text-base mb-4 flex items-center gap-2">
@@ -225,50 +220,59 @@ export default function MyProfilePage() {
 
                     {/* ── Settings / Edit Profile Tab ── */}
                     {activeTab === 'edit' && (
-                        <div className="card-premium space-y-8 animate-fade-in shadow-sm relative">
-                            {/* Decorative background blur */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-                            <div className="flex items-center gap-3 border-b border-border/40 pb-4 relative z-10">
-                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                                    <Pencil size={18} className="text-primary" />
+                        <div className="space-y-6 animate-fade-in">
+                            {/* Personal Information Module */}
+                            <div className="card-premium bg-white/80 backdrop-blur-md shadow-sm ring-1 ring-black/5 p-6 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                                <div className="flex items-center gap-3 border-b border-border/40 pb-4 mb-6 relative z-10">
+                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                        <Pencil size={18} className="text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-text">Personal Information</h3>
+                                        <p className="text-xs font-medium text-muted">Update your personal details and contact info.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-lg font-bold text-text">General Settings</h3>
-                                    <p className="text-xs font-medium text-muted">Update your personal information and preferences.</p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-6 relative z-10">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 relative z-10">
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-bold text-text uppercase tracking-wider">First Name</label>
-                                        <input className="input-field" value={form.firstName} onChange={e => update('firstName', e.target.value)} />
+                                        <input className="input-field bg-white/50 focus:bg-white" value={form.firstName} onChange={e => update('firstName', e.target.value)} />
                                     </div>
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-bold text-text uppercase tracking-wider">Last Name</label>
-                                        <input className="input-field" value={form.lastName} onChange={e => update('lastName', e.target.value)} />
+                                        <input className="input-field bg-white/50 focus:bg-white" value={form.lastName} onChange={e => update('lastName', e.target.value)} />
+                                    </div>
+                                    <div className="space-y-1.5 sm:col-span-2">
+                                        <label className="text-xs font-bold text-text uppercase tracking-wider flex items-center gap-2">
+                                            Email Address <span className="text-[10px] bg-warning/10 text-warning-dark px-2 py-0.5 rounded-full">Read Only</span>
+                                        </label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+                                            <input className="input-field pl-10 bg-gray-50/50 text-muted cursor-not-allowed border-dashed focus:border-border" value={form.email} disabled />
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-text uppercase tracking-wider flex items-center gap-2">
-                                        Email Address <span className="text-[10px] bg-warning/10 text-warning-dark px-2 py-0.5 rounded-full">Read Only</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
-                                        <input className="input-field pl-10 bg-gray-50 text-muted cursor-not-allowed border-dashed focus:border-border" value={form.email} disabled />
+                            {/* Academic Details Module */}
+                            <div className="card-premium bg-white/80 backdrop-blur-md shadow-sm ring-1 ring-black/5 p-6 relative overflow-hidden">
+                                <div className="flex items-center gap-3 border-b border-border/40 pb-4 mb-6 relative z-10">
+                                    <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center">
+                                        <GraduationCap size={18} className="text-accent" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-text">Academic Details</h3>
+                                        <p className="text-xs font-medium text-muted">Your university, year, and course discipline.</p>
                                     </div>
                                 </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-border/40">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 relative z-10">
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-bold text-text uppercase tracking-wider">College / University</label>
-                                        <input className="input-field" value={form.college} onChange={e => update('college', e.target.value)} />
+                                        <input className="input-field bg-white/50 focus:bg-white" value={form.college} onChange={e => update('college', e.target.value)} />
                                     </div>
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-bold text-text uppercase tracking-wider">Current Year</label>
-                                        <select className="input-field" value={form.year} onChange={e => update('year', e.target.value)}>
+                                        <select className="input-field bg-white/50 focus:bg-white" value={form.year} onChange={e => update('year', e.target.value)}>
                                             <option value="1st Year">1st Year</option>
                                             <option value="2nd Year">2nd Year</option>
                                             <option value="3rd Year">3rd Year</option>
@@ -276,54 +280,68 @@ export default function MyProfilePage() {
                                             <option value="Alumni">Alumni</option>
                                         </select>
                                     </div>
-                                </div>
-
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-text uppercase tracking-wider">Department</label>
-                                    <input className="input-field" value={form.department} onChange={e => update('department', e.target.value)} />
-                                </div>
-
-                                <div className="space-y-1.5 pt-4 border-t border-border/40">
-                                    <label className="text-xs font-bold text-text uppercase tracking-wider flex justify-between">
-                                        About You
-                                        <span className="text-muted lowercase font-medium">{form.bio.length}/300</span>
-                                    </label>
-                                    <textarea 
-                                        className="input-field min-h-[120px] resize-none pb-4" 
-                                        value={form.bio} 
-                                        onChange={e => update('bio', e.target.value)} 
-                                        maxLength={300} 
-                                        placeholder="Write a short summary about yourself..."
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="text-xs font-bold text-text uppercase tracking-wider mb-3 flex items-center justify-between">
-                                        Expertise Areas
-                                        <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px]">{form.subjects.length}/5 Selected</span>
-                                    </label>
-                                    <div className="flex flex-wrap gap-2 p-5 bg-gray-50 rounded-xl border border-border/60 shadow-inner">
-                                        {SUBJECTS.map(s => (
-                                            <div key={s.id} className="transition-transform active:scale-95">
-                                                <SubjectPill
-                                                    subjectId={s.id}
-                                                    selected={form.subjects.includes(s.id)}
-                                                    onClick={() => toggleSubject(s.id)}
-                                                    className="cursor-pointer font-bold"
-                                                />
-                                            </div>
-                                        ))}
+                                    <div className="space-y-1.5 sm:col-span-2">
+                                        <label className="text-xs font-bold text-text uppercase tracking-wider">Department</label>
+                                        <input className="input-field bg-white/50 focus:bg-white" value={form.department} onChange={e => update('department', e.target.value)} />
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className="flex justify-end gap-3 pt-6 border-t border-border/40">
-                                    <button 
-                                        onClick={handleSave} 
-                                        className="w-full sm:w-auto px-8 h-12 bg-gradient-primary text-white rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all text-sm flex items-center justify-center gap-2"
-                                    >
-                                        <Save size={18}/> Save Settings
-                                    </button>
+                            {/* About & Expertise Module */}
+                            <div className="card-premium bg-white/80 backdrop-blur-md shadow-sm ring-1 ring-black/5 p-6 relative overflow-hidden">
+                                <div className="flex items-center gap-3 border-b border-border/40 pb-4 mb-6 relative z-10">
+                                    <div className="w-10 h-10 bg-success/10 rounded-xl flex items-center justify-center">
+                                        <BookOpen size={18} className="text-success-dark" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-text">About You & Expertise</h3>
+                                        <p className="text-xs font-medium text-muted">Tell students about your teaching skills.</p>
+                                    </div>
                                 </div>
+                                <div className="space-y-6 relative z-10">
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-text uppercase tracking-wider flex justify-between">
+                                            Short Bio
+                                            <span className="text-muted lowercase font-medium">{form.bio.length}/300</span>
+                                        </label>
+                                        <textarea 
+                                            className="input-field min-h-[120px] resize-none pb-4 pt-3 bg-white/50 focus:bg-white" 
+                                            value={form.bio} 
+                                            onChange={e => update('bio', e.target.value)} 
+                                            maxLength={300} 
+                                            placeholder="Write a short summary about yourself..."
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-bold text-text uppercase tracking-wider mb-3 flex items-center justify-between">
+                                            Expertise Areas
+                                            <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px]">{form.subjects.length}/5 Selected</span>
+                                        </label>
+                                        <div className="flex flex-wrap gap-2 p-5 bg-white/40 rounded-xl border border-border/60 shadow-inner">
+                                            {SUBJECTS.map(s => (
+                                                <div key={s.id} className="transition-transform active:scale-95">
+                                                    <SubjectPill
+                                                        subjectId={s.id}
+                                                        selected={form.subjects.includes(s.id)}
+                                                        onClick={() => toggleSubject(s.id)}
+                                                        className="cursor-pointer font-bold bg-white"
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Submission Area */}
+                            <div className="flex justify-end pt-2 pb-6">
+                                <button 
+                                    onClick={handleSave} 
+                                    className="w-full sm:w-auto px-10 h-14 bg-gradient-primary text-white rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <Save size={18}/> Save Settings
+                                </button>
                             </div>
                         </div>
                     )}

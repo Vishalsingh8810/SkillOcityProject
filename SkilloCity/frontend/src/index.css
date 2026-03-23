@@ -5,18 +5,18 @@
 @tailwind utilities;
 
 :root {
-  /* Ultra-minimal Mono palette */
-  --primary: #09090B;      /* zinc-950 */
-  --primary-dark: #000000;   /* Pitch black */
-  --primary-light: #F4F4F5;  /* zinc-100 */
+  /* Modern Vibrant Tech Palette */
+  --primary: #4F46E5;      /* indigo-600 */
+  --primary-dark: #4338CA;   /* indigo-700 */
+  --primary-light: #EEF2FF;  /* indigo-50 */
   
-  --bg: #FAFAFA;           /* zinc-50 */
+  --bg: #F8FAFC;           /* slate-50 */
   --surface: #FFFFFF;        /* Pure white */
   
-  --text: #09090B;         /* zinc-950 */
-  --muted: #71717A;        /* zinc-500 */
+  --text: #0F172A;         /* slate-900 */
+  --muted: #64748B;        /* slate-500 */
   
-  --border: #E4E4E7;       /* zinc-200 */
+  --border: #E2E8F0;       /* slate-200 */
   
   /* Semantic state colors muted down for luxury */
   --success: #10B981;
@@ -24,30 +24,30 @@
   --danger: #EF4444;
   
   /* Extremely subtle, tight shadows instead of cloudy glows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-  --shadow-focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #09090B;
+  --shadow-sm: 0 1px 2px 0 rgba(79, 70, 229, 0.05); /* slightly tinted shadow */
+  --shadow-md: 0 4px 6px -1px rgba(79, 70, 229, 0.1), 0 2px 4px -2px rgba(79, 70, 229, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(79, 70, 229, 0.1), 0 4px 6px -4px rgba(79, 70, 229, 0.05);
+  --shadow-focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #4F46E5;
 }
 
 /* ─── Dark Mode ─── */
 html.dark {
-  --primary: #FAFAFA;
-  --primary-dark: #FFFFFF;
-  --primary-light: #27272A;
+  --primary: #818CF8;      /* indigo-400 */
+  --primary-dark: #A5B4FC; /* indigo-300 */
+  --primary-light: #1E1B4B;/* indigo-950 */
 
-  --bg: #09090B;
-  --surface: #18181B;
+  --bg: #0F172A;           /* slate-900 */
+  --surface: #1E293B;      /* slate-800 */
 
-  --text: #FAFAFA;
-  --muted: #A1A1AA;
+  --text: #F8FAFC;         /* slate-50 */
+  --muted: #94A3B8;        /* slate-400 */
 
-  --border: #3F3F46;
+  --border: #334155;       /* slate-700 */
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --shadow-focus: 0 0 0 2px #18181B, 0 0 0 4px #FAFAFA;
+  --shadow-focus: 0 0 0 2px #1E293B, 0 0 0 4px #818CF8;
 }
 
 * {
@@ -109,6 +109,20 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-backdrop-filter: blur(12px) saturate(140%);
     border-bottom: 1px solid var(--border);
   }
+
+  /* Global Missing Gradients */
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-accent text-white;
+  }
+  .bg-gradient-warning {
+    @apply bg-gradient-to-r from-warning to-orange-400 text-white;
+  }
+  .bg-gradient-success {
+    @apply bg-gradient-to-r from-success to-emerald-400 text-white;
+  }
+  .bg-gradient-accent {
+    @apply bg-gradient-to-r from-accent to-fuchsia-500 text-white;
+  }
 }
 
 /* ─── Animations ─── */
@@ -134,13 +148,13 @@ h1, h2, h3, h4, h5, h6 {
 @layer components {
   /* Premium buttons: Pure solid, crisp padding, sharp radius */
   .btn-primary {
-    @apply bg-primary text-white font-medium rounded-md px-6 h-10 transition-colors hover:bg-zinc-800 flex items-center justify-center gap-2 outline-none;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    @apply bg-primary text-white font-medium rounded-md px-6 h-10 transition-colors hover:bg-primary-dark flex items-center justify-center gap-2 outline-none;
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2);
   }
   .btn-primary:active { transform: translateY(1px); }
 
   .btn-outline {
-    @apply border border-border bg-white text-text font-medium rounded-md px-6 h-10 transition-colors hover:bg-zinc-50 flex items-center justify-center gap-2 outline-none shadow-sm;
+    @apply border border-border bg-white text-primary font-medium rounded-md px-6 h-10 transition-colors hover:bg-primary-light flex items-center justify-center gap-2 outline-none shadow-sm;
   }
   .btn-outline:active { transform: translateY(1px); }
 
@@ -163,6 +177,15 @@ h1, h2, h3, h4, h5, h6 {
   }
   .input-premium:focus {
     @apply border-primary ring-1 ring-primary;
+  }
+
+  /* Form Inputs for Profile/Settings */
+  .input-field {
+    @apply w-full h-11 px-4 bg-white/50 backdrop-blur-sm border border-border rounded-xl text-sm text-text transition-all placeholder:text-muted/50 outline-none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  }
+  .input-field:focus {
+    @apply border-primary ring-2 ring-primary/20 bg-white;
   }
 }
 

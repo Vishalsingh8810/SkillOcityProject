@@ -152,7 +152,7 @@ export default function TeacherDashboard() {
                                                 
                                                 {/* Actions strictly constrained */}
                                                 <div className="shrink-0 flex sm:flex-col gap-3 pt-1">
-                                                    <button onClick={() => handleAccept(req.id)} className="flex-1 sm:flex-none h-10 px-6 rounded-md font-medium text-white bg-zinc-900 hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 shrink-0">
+                                                    <button onClick={() => handleAccept(req.id)} className="flex-1 sm:flex-none h-10 px-6 rounded-md font-bold text-white bg-primary hover:bg-primary-dark transition-colors flex items-center justify-center gap-2 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shrink-0 shadow-sm border border-transparent">
                                                         <CheckCircle size={14} className="shrink-0" /> Accept
                                                     </button>
                                                     <button onClick={() => handleDecline(req.id)} className="flex-1 sm:flex-none h-10 px-4 rounded-md font-medium text-[13px] text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 hover:text-zinc-900 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 shrink-0">
@@ -199,7 +199,7 @@ export default function TeacherDashboard() {
                                             
                                             <button
                                                 onClick={() => window.open(session.meetLink, '_blank')}
-                                                className={`w-full h-9 rounded-md flex items-center justify-center gap-2 text-[12px] font-bold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${session.status === 'ongoing' ? 'bg-zinc-900 text-white hover:bg-zinc-800 focus-visible:ring-zinc-900' : 'border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50 focus-visible:ring-zinc-900'}`}
+                                                className={`w-full h-9 rounded-md flex items-center justify-center gap-2 text-[12px] font-bold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shrink-0 ${session.status === 'ongoing' ? 'bg-primary text-white hover:bg-primary-dark focus-visible:ring-primary' : 'border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50 focus-visible:ring-primary'}`}
                                             >
                                                 <Video size={14} className="shrink-0" /> {session.status === 'ongoing' ? 'Join Call' : 'Meet Link'}
                                             </button>
@@ -213,7 +213,7 @@ export default function TeacherDashboard() {
                             <div className="relative z-10 flex flex-col h-full justify-center">
                                 <h3 className="text-base font-bold text-white mb-2">Update availability</h3>
                                 <p className="text-[13px] font-medium text-zinc-400 mb-6 leading-relaxed">Keep your calendar aligned to receive appropriate help requests.</p>
-                                <button onClick={() => navigate('/profile')} className="h-9 px-4 rounded-md border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-white text-[12px] font-bold transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 w-full sm:w-auto self-start">
+                                <button onClick={() => navigate('/profile')} className="h-9 px-4 rounded-md border border-transparent bg-primary hover:bg-primary-dark text-white text-[12px] font-bold transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary w-full sm:w-auto self-start">
                                     Manage Schedule
                                 </button>
                             </div>

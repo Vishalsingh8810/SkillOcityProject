@@ -1,10 +1,10 @@
 import { Loader2 } from 'lucide-react';
 
 const variants = {
-    primary: 'bg-primary text-white border border-transparent hover:bg-zinc-800 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-950',
-    outline: 'bg-white text-text border border-border hover:bg-zinc-50 hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-950',
-    ghost: 'bg-transparent text-muted hover:bg-zinc-100 hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-950',
-    danger: 'bg-danger text-white border border-transparent hover:bg-red-600 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-600'
+    primary: 'bg-primary text-white border border-transparent hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary shadow-sm hover:shadow-md hover:-translate-y-0.5',
+    outline: 'bg-white text-primary border border-border hover:bg-primary-light hover:text-primary-dark focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary shadow-sm hover:-translate-y-0.5',
+    ghost: 'bg-transparent text-muted hover:bg-primary-light hover:text-primary-dark focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary',
+    danger: 'bg-danger text-white border border-transparent hover:bg-danger-dark focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-danger shadow-sm hover:shadow-md hover:-translate-y-0.5'
 };
 
 const sizes = {

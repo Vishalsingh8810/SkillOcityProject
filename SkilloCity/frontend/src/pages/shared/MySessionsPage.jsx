@@ -74,18 +74,18 @@ export default function MySessionsPage() {
                 </div>
 
                 {/* ── Tabs ── */}
-                <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-8 p-1.5 bg-white border border-border/60 rounded-2xl shadow-sm">
+                <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-8 p-1.5 bg-white/70 backdrop-blur-md border border-black/[0.04] rounded-2xl shadow-sm ring-1 ring-white/50">
                     {tabs.map(tab => {
                         const isActive = activeTab === tab.id;
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold transition-all duration-300 relative ${isActive ? 'bg-gray-50 text-text shadow-sm border border-border/40' : 'text-muted hover:bg-gray-50/50 hover:text-text'}`}
+                                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold transition-all duration-300 relative ${isActive ? 'bg-white text-text shadow-sm border border-black/5' : 'text-muted hover:bg-white/50 hover:text-text border border-transparent'}`}
                             >
                                 <span className={`${isActive ? tab.color : 'text-muted'}`}>{tab.icon}</span>
                                 {tab.label}
-                                <span className={`ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold ${isActive ? `${tab.bg} text-white` : 'bg-gray-200 text-muted'}`}>
+                                <span className={`ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold ${isActive ? `${tab.bg} text-white` : 'bg-zinc-100 text-muted'}`}>
                                     {tab.count}
                                 </span>
                             </button>
@@ -118,7 +118,7 @@ export default function MySessionsPage() {
                                     : "You haven't completed any sessions yet."}
                         </p>
                         {activeTab === 'upcoming' && user?.role === 'student' && (
-                            <button onClick={() => navigate('/browse-tutors')} className="btn-primary px-6 rounded-xl">
+                            <button onClick={() => navigate('/browse-tutors')} className="h-11 mt-4 bg-primary text-white px-8 rounded-xl font-bold shadow-md hover:bg-primary-dark transition-colors">
                                 Browse Tutors
                             </button>
                         )}

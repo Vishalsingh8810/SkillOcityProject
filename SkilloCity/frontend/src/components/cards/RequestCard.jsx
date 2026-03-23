@@ -62,7 +62,7 @@ export default function RequestCard({ request, onAccept, onDecline, showActions 
                             </button>
                             <button 
                                 onClick={(e) => { e.stopPropagation(); onAccept?.(request.id); }}
-                                className="flex-1 h-9 bg-zinc-900 text-white rounded-md font-medium text-sm hover:bg-zinc-800 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 shadow-sm min-w-0 truncate"
+                                className="flex-1 h-9 bg-primary text-white rounded-md font-bold text-sm hover:bg-primary-dark transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm min-w-0 truncate"
                             >
                                 Accept Request
                             </button>

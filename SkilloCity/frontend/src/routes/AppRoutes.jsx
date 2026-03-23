@@ -9,6 +9,7 @@ import ErrorBoundary from '../components/common/ErrorBoundary';
 const LandingPage = lazy(() => import('../pages/public/LandingPage'));
 const LoginPage = lazy(() => import('../pages/public/LoginPage'));
 const SignupPage = lazy(() => import('../pages/public/SignupPage'));
+const ForgotPasswordPage = lazy(() => import('../pages/public/ForgotPasswordPage'));
 const StudentDashboard = lazy(() => import('../pages/student/StudentDashboard'));
 const BrowseTutors = lazy(() => import('../pages/student/BrowseTutors'));
 const TutorProfile = lazy(() => import('../pages/student/TutorProfile'));
@@ -38,6 +39,8 @@ export default function AppRoutes() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
 
                 {/* Student */}
                 <Route path="/dashboard" element={<ProtectedRoute><RoleRoute role="student"><StudentDashboard /></RoleRoute></ProtectedRoute>} />

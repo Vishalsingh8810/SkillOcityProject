@@ -22,7 +22,7 @@ export default function SessionCard({ session, currentUserId, onJoin, onReview, 
         <div className="card-premium p-0 flex flex-col group h-full">
             {/* Countdown banner for upcoming sessions */}
             {session.status === 'upcoming' && within24 && timeUntil && (
-                <div className="bg-zinc-900 text-white px-5 py-2 flex items-center gap-2 shrink-0">
+                <div className="bg-gradient-to-r from-primary to-indigo-600 text-white px-5 py-2 flex items-center gap-2 shrink-0">
                     <span className="relative flex h-2 w-2 shrink-0">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -85,7 +85,7 @@ export default function SessionCard({ session, currentUserId, onJoin, onReview, 
                     {(session.status === 'upcoming' || session.status === 'ongoing') && (
                         <button
                             onClick={() => window.open(session.meetLink, '_blank')}
-                            className={`flex flex-1 h-9 px-4 rounded-md font-semibold text-[13px] items-center justify-center gap-2 transition-colors border shadow-sm shrink-0 min-w-0 ${startingSoon || session.status === 'ongoing' ? 'bg-zinc-900 text-white border-transparent hover:bg-zinc-800' : 'bg-white text-text border-border hover:bg-zinc-50'}`}
+                            className={`flex flex-1 h-9 px-4 rounded-md font-semibold text-[13px] items-center justify-center gap-2 transition-colors border shadow-sm shrink-0 min-w-0 ${startingSoon || session.status === 'ongoing' ? 'bg-primary text-white border-transparent hover:bg-primary-dark' : 'bg-white text-text border-border hover:bg-zinc-50'}`}
                         >
                             <Video size={14} className="shrink-0" /> 
                             <span className="truncate">Join Room</span>
@@ -99,7 +99,7 @@ export default function SessionCard({ session, currentUserId, onJoin, onReview, 
                     )}
 
                     {session.status === 'completed' && !session.reviewed && (
-                        <button onClick={onReview} className="flex-1 h-9 bg-zinc-900 border border-transparent text-white rounded-md font-semibold hover:bg-zinc-800 transition-colors shadow-sm text-[13px] flex items-center justify-center gap-2 shrink-0 min-w-0">
+                        <button onClick={onReview} className="flex-1 h-9 bg-primary border border-transparent text-white rounded-md font-semibold hover:bg-primary-dark transition-colors shadow-sm text-[13px] flex items-center justify-center gap-2 shrink-0 min-w-0">
                             <span className="truncate">Submit Review</span> <ArrowRight size={14} className="shrink-0" />
                         </button>
                     )}

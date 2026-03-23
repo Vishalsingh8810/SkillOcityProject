@@ -142,23 +142,22 @@ export default function MessagesPage() {
         }
     };
 
-    const handleCreateMeetLink = (meetLink) => {
-        const text = `📹 Join my meet room: ${meetLink}`;
-        if (connected) {
-            emit('message:send', {
-                conversationId: activeConvId,
-                text,
-                type: 'meet-link',
-                meetLink,
-            });
-        } else {
-            // Fallback to HTTP
-            messageService.sendMessage(activeConvId, text).then(newMsg => {
-                setMessages(prev => ({
-                    ...prev,
-                    [activeConvId]: [...(prev[activeConvId] || []), newMsg],
-                }));
-            }).catch(err => console.error('Error sending meet link:', err));
+    const handleSendFile = async (file) => {
+        try {
+            const newMsg = await messageService.sendFileMessage(activeConvId, file);
+            setMessages(prev => ({
+                ...prev,
+                [activeConvId]: [...(prev[activeConvId] || []), newMsg],
+            }));
+            // Update conversation sidebar
+            setConversations(prev => prev.map(c =>
+                c.id === activeConvId
+                    ? { ...c, lastMessage: newMsg.text, lastMessageTime: newMsg.timestamp || new Date().toISOString() }
+                    : c
+            ));
+        } catch (err) {
+            console.error('Error sending file:', err);
+            throw err; // Let ChatInput show the error
         }
     };
 
@@ -298,6 +297,7 @@ export default function MessagesPage() {
                                             </div>
                                         );
                                     }
+                                    // Both text and file messages use MessageBubble (it handles file rendering internally)
                                     return (
                                         <div key={msg.id} className={isSameAsPrev ? 'mt-1' : 'mt-4'}>
                                             <MessageBubble
@@ -318,7 +318,7 @@ export default function MessagesPage() {
                                     <QuickReplies onSelect={handleQuickReply} />
                                 </div>
                                 <div className="p-4">
-                                    <ChatInput onSend={handleSend} onCreateMeetLink={handleCreateMeetLink} />
+                                    <ChatInput onSend={handleSend} onSendFile={handleSendFile} />
                                 </div>
                             </div>
                         </>

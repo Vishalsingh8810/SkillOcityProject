@@ -57,7 +57,7 @@ export default function TutorProfile() {
 
     return (
         <PageWrapper>
-            <div className="max-w-5xl mx-auto page-enter pb-10">
+            <div className="max-w-5xl mx-auto page-enter pb-10 px-2 sm:px-0">
                 {/* ─── Breadcrumb ─── */}
                 <div className="flex items-center gap-2 text-sm text-muted mb-6">
                     <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 hover:text-primary transition-colors font-medium">
@@ -69,27 +69,22 @@ export default function TutorProfile() {
                 </div>
 
                 {/* ─── Hero Profile Card ─── */}
-                <div className="card-premium overflow-hidden mb-8 p-0 border-0 shadow-lg">
+                <div className="card-premium overflow-hidden mb-8 p-0 border-0 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-black/5 bg-white/50 backdrop-blur-md">
                     {/* Gradient banner */}
-                    <div
-                        className="h-48 sm:h-56 relative border-b border-border/20 z-0"
-                        style={{
-                            background: 'linear-gradient(135deg, #1A1A2E 0%, #2D2B55 40%, #3B2FCC 100%)',
-                        }}
-                    >
+                    <div className="h-48 sm:h-56 relative border-b border-black/[0.05] z-0 bg-gradient-to-tr from-indigo-950 via-primary to-purple-800">
                          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent/30 rounded-full blur-3xl animate-pulse-slow" />
-                            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary/40 rounded-full blur-2xl" />
-                            <div className="absolute inset-0 opacity-[0.05]" style={{
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent/30 rounded-full blur-3xl animate-pulse-slow max-w-full" />
+                            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-white/10 rounded-full blur-2xl max-w-full" />
+                            <div className="absolute inset-0 opacity-[0.08]" style={{
                                 backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                                backgroundSize: '16px 16px'
+                                backgroundSize: '24px 24px'
                             }} />
                         </div>
 
                         {/* Badges in Banner */}
                         <div className="absolute top-5 left-5 sm:top-6 sm:left-6 flex flex-wrap gap-2 z-10">
                             {tutor.isVerified && (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-white/10 text-white backdrop-blur-md border border-white/20 shadow-sm capitalize tracking-wider">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-primary hover:bg-primary-dark text-white backdrop-blur-md border border-white/20 shadow-sm capitalize tracking-wider">
                                     <ShieldCheck size={14} className="text-success-light" /> Verified
                                 </span>
                             )}
@@ -138,17 +133,30 @@ export default function TutorProfile() {
                     </div>
                 </div>
 
+                {/* ─── Stats Grid (Moved here for immediate visibility and layout stability) ─── */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    {stats.map((stat, i) => (
+                        <div key={i} className="card-premium bg-white/70 backdrop-blur-md p-5 flex flex-col items-center justify-center text-center shadow-sm hover:-translate-y-1 hover:shadow-md transition-all group ring-1 ring-black/5">
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-3 shadow-sm group-hover:scale-110 transition-transform ${stat.gradient}`}>
+                                {stat.icon}
+                            </div>
+                            <div className="text-2xl font-bold text-text mb-0.5">{stat.value}</div>
+                            <div className="text-[10px] font-bold text-muted uppercase tracking-wider">{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+
                 <div className="grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         {/* ─── Section Navigation ─── */}
-                        <div className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden p-1.5 flex gap-1 sticky top-6 z-20">
+                        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-black/[0.04] shadow-sm overflow-hidden p-1.5 flex gap-1 sticky top-6 z-20 ring-1 ring-white/50">
                             {sections.map((sec) => (
                                 <button
                                     key={sec.id}
                                     onClick={() => setActiveSection(sec.id)}
-                                    className={`flex-1 py-3 px-4 text-sm font-bold rounded-xl transition-all duration-300 ${activeSection === sec.id
-                                            ? 'bg-primary text-white shadow-sm'
-                                            : 'text-muted hover:text-text hover:bg-gray-50'
+                                    className={`flex-1 py-3 px-4 text-sm font-bold rounded-xl transition-all duration-300 border ${activeSection === sec.id
+                                            ? 'bg-primary text-white shadow-sm border-transparent'
+                                            : 'text-muted hover:text-text hover:bg-white/50 border-transparent'
                                         }`}
                                 >
                                     {sec.label}
@@ -158,7 +166,7 @@ export default function TutorProfile() {
 
                         {/* ── About ── */}
                         {activeSection === 'about' && (
-                            <div className="card-premium space-y-8 animate-fade-in">
+                            <div className="card-premium bg-white/70 backdrop-blur-md space-y-8 animate-fade-in shadow-sm ring-1 ring-black/5">
                                 <div>
                                     <h3 className="section-title text-lg mb-4">About {tutor.firstName}</h3>
                                     <div className="text-sm text-text/80 leading-relaxed space-y-4">
@@ -193,7 +201,7 @@ export default function TutorProfile() {
 
                         {/* ── Availability ── */}
                         {activeSection === 'availability' && (
-                            <div className="card-premium animate-fade-in">
+                            <div className="card-premium bg-white/70 backdrop-blur-md animate-fade-in shadow-sm ring-1 ring-black/5">
                                 <div className="flex items-center justify-between mb-6">
                                     <h3 className="section-title text-lg mb-0 text-text font-bold flex items-center gap-2">
                                         <div className="w-8 h-8 rounded-lg bg-primary-light/50 flex items-center justify-center text-primary"><Calendar size={16}/></div>
@@ -252,8 +260,8 @@ export default function TutorProfile() {
 
                         {/* ── Reviews ── */}
                         {activeSection === 'reviews' && (
-                            <div className="card-premium space-y-6 animate-fade-in">
-                                <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/60 shadow-inner">
+                            <div className="card-premium bg-white/70 backdrop-blur-md space-y-6 animate-fade-in shadow-sm ring-1 ring-black/5">
+                                <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-primary/60 shadow-inner">
                                     <div className="text-center sm:text-left">
                                         <div className="text-5xl font-display text-amber-600 mb-1">{tutor.rating || '0.0'}</div>
                                         <StarRating rating={tutor.rating} size={18} className="justify-center sm:justify-start" />
@@ -298,22 +306,11 @@ export default function TutorProfile() {
                         )}
                     </div>
 
-                    {/* Right column: Stats Grid */}
+                    {/* Right column: Action Cards */}
                     <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                             {stats.map((stat, i) => (
-                                <div key={i} className="card-premium p-5 flex flex-col items-center justify-center text-center shadow-sm hover:-translate-y-1 transition-transform group">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-3 shadow-sm group-hover:shadow-md transition-shadow ${stat.gradient}`}>
-                                        {stat.icon}
-                                    </div>
-                                    <div className="text-2xl font-bold text-text mb-0.5">{stat.value}</div>
-                                    <div className="text-[10px] font-bold text-muted uppercase tracking-wider">{stat.label}</div>
-                                </div>
-                            ))}
-                        </div>
-
                         {/* Quick action card */}
-                        <div className="card-premium bg-gradient-to-b from-white to-gray-50 border border-border/60 text-center py-8 px-6 shadow-sm">
+                        <div className="card-premium bg-white/70 backdrop-blur-md border border-black/5 text-center py-8 px-6 shadow-sm ring-1 ring-black/5 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
                             <div className="w-14 h-14 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Calendar size={28} />
                             </div>
@@ -321,7 +318,7 @@ export default function TutorProfile() {
                             <p className="text-xs text-muted mb-6">Send a request with your preferred time and topic. It's completely free.</p>
                             <button
                                 onClick={() => navigate(`/send-request/${tutor.id}`)}
-                                className="w-full h-12 bg-text hover:bg-black text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all active:scale-95"
+                                className="w-full h-12 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all active:scale-95"
                             >
                                 Request Session <ArrowRight size={16} />
                             </button>

@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({
     totalSessions: { type: Number, default: 0 },
     studentsHelped: { type: Number, default: 0 },
     responseTime: { type: String, default: '' },
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
     settings: {
         emailNotifications: { type: Boolean, default: true },
         pushNotifications: { type: Boolean, default: true },

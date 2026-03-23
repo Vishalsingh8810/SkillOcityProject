@@ -76,7 +76,10 @@ export default function SignupPage() {
             await signup(form);
             toast.success('Account created.');
             navigate(form.role === 'teacher' ? '/teacher/dashboard' : '/dashboard');
-        } catch { toast.error('Signup failed.'); }
+        } catch (err) {
+            const msg = err?.response?.data?.message || 'Signup failed. Please try again.';
+            toast.error(msg);
+        }
         finally { setLoading(false); }
     };
 
@@ -107,7 +110,7 @@ export default function SignupPage() {
                                 <div key={s.num} className={`flex items-center ${i === 2 ? 'flex-none' : 'flex-1'}`}>
                                     <div className="flex flex-col items-center relative z-10">
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold transition-all duration-300 ${
-                                            isPast || isActive ? 'bg-zinc-950 text-white' : 'bg-white text-zinc-400 border border-zinc-200'
+                                            isPast || isActive ? 'bg-primary text-white' : 'bg-white text-muted border border-border'
                                         }`}>
                                             {isPast ? <Check size={14} strokeWidth={3} /> : s.num}
                                         </div>
@@ -117,7 +120,7 @@ export default function SignupPage() {
                                     </div>
                                     {i < 2 && (
                                         <div className="flex-1 mx-3 h-[1px] bg-zinc-200 overflow-hidden">
-                                            <div className="h-full bg-zinc-900 transition-all duration-500 ease-out" style={{ width: isPast ? '100%' : '0%' }} />
+                                            <div className="h-full bg-primary transition-all duration-500 ease-out" style={{ width: isPast ? '100%' : '0%' }} />
                                         </div>
                                     )}
                                 </div>
@@ -179,7 +182,7 @@ export default function SignupPage() {
                             </div>
                             
                             <div className="pt-4 mt-auto">
-                                <button onClick={next} className="w-full h-11 bg-zinc-950 text-white rounded-md font-medium text-[13px] transition-all hover:bg-zinc-800 active:translate-y-[1px] flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2">
+                                <button onClick={next} className="w-full h-11 bg-primary text-white rounded-md font-medium text-[13px] transition-all hover:bg-primary-dark active:translate-y-[1px] flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                                     Continue <ChevronRight size={16} />
                                 </button>
                             </div>
@@ -221,7 +224,7 @@ export default function SignupPage() {
                                 <button onClick={back} className="w-24 h-11 bg-white border border-zinc-200 text-zinc-700 rounded-md font-medium text-[13px] hover:bg-zinc-50 transition-colors flex items-center justify-center gap-1 active:translate-y-[1px] outline-none focus-visible:ring-2 focus-visible:ring-zinc-900">
                                     Back
                                 </button>
-                                <button onClick={next} className="flex-1 h-11 bg-zinc-950 text-white rounded-md font-medium text-[13px] transition-all hover:bg-zinc-800 active:translate-y-[1px] flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2">
+                                <button onClick={next} className="flex-1 h-11 bg-primary text-white rounded-md font-medium text-[13px] transition-all hover:bg-primary-dark active:translate-y-[1px] flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                                     Continue <ChevronRight size={16} />
                                 </button>
                             </div>
@@ -281,7 +284,7 @@ export default function SignupPage() {
                                 <button 
                                     onClick={handleSubmit} 
                                     disabled={loading}
-                                    className={`flex-1 h-11 rounded-md font-medium text-[13px] flex items-center justify-center gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 shrink-0 ${loading ? 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed' : 'bg-zinc-950 text-white hover:bg-zinc-800 active:translate-y-[1px]'}`}
+                                    className={`flex-1 h-11 rounded-md font-medium text-[13px] flex items-center justify-center gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shrink-0 ${loading ? 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed' : 'bg-primary text-white hover:bg-primary-dark active:translate-y-[1px]'}`}
                                 >
                                     {loading ? <span className="w-4 h-4 border-2 border-zinc-400 border-t-zinc-600 rounded-full animate-spin shrink-0" /> : 'Complete Setup'}
                                 </button>

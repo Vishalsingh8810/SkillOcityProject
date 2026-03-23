@@ -129,16 +129,16 @@ export default function StudentDashboard() {
                 <div className="relative mb-14" ref={searchRef}>
                     <form onSubmit={handleSearchSubmit}>
                         <div className="relative group">
-                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-zinc-900 transition-colors" />
+                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
                             <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onFocus={() => searchResults.length > 0 && setShowSearchDropdown(true)}
                                 placeholder="Search to learn something new today..."
-                                className="w-full h-12 pl-12 pr-24 bg-zinc-50 border border-zinc-200 rounded-md text-[15px] font-medium text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 transition-colors shadow-sm"
+                                className="w-full h-12 pl-12 pr-24 bg-white border border-border rounded-md text-[15px] font-medium text-text placeholder:text-muted focus:outline-none focus:bg-white focus:ring-1 focus:ring-primary focus:border-primary transition-colors shadow-sm"
                             />
-                            <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 px-4 bg-zinc-900 text-white rounded-md text-[13px] font-bold hover:bg-zinc-800 transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2">
+                            <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 px-4 bg-primary text-white rounded-md text-[13px] font-bold hover:bg-primary-dark transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                                 Search
                             </button>
                         </div>
@@ -265,7 +265,7 @@ export default function StudentDashboard() {
                                         </div>
                                         
                                         {session.meetLink ? (
-                                             <button onClick={() => window.open(session.meetLink, '_blank')} className="shrink-0 h-8 px-3 ml-4 bg-zinc-900 text-white text-[11px] font-bold uppercase tracking-wider rounded border border-transparent hover:bg-zinc-800 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2">
+                                             <button onClick={() => window.open(session.meetLink, '_blank')} className="shrink-0 h-8 px-3 ml-4 bg-primary text-white text-[11px] font-bold uppercase tracking-wider rounded border border-transparent hover:bg-primary-dark transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                                                  Join Room
                                              </button>
                                         ) : (

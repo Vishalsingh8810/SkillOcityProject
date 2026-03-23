@@ -86,7 +86,7 @@ export default function TutorCard({ tutor, variant = 'default' }) {
                     {/* Minimal pure action */}
                     <button
                         onClick={(e) => { e.stopPropagation(); navigate(`/tutor/${tutor.id}`); }}
-                        className="w-full h-9 rounded-md text-xs font-semibold transition-colors border border-border bg-white text-text group-hover:bg-zinc-900 group-hover:text-white group-hover:border-transparent flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 shadow-sm shrink-0"
+                        className="w-full h-9 rounded-md text-xs font-semibold transition-colors border border-border bg-white text-text group-hover:bg-primary group-hover:text-white group-hover:border-transparent flex items-center justify-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm shrink-0"
                     >
                         View Profile <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </button>

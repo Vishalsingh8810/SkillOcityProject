@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import TutorCard from '../../components/cards/TutorCard';
-import Input from '../../components/common/Input';
 import Toggle from '../../components/common/Toggle';
-import Spinner from '../../components/common/Spinner';
 import StarRating from '../../components/common/StarRating';
 import { Search, Filter, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { SUBJECTS } from '../../utils/constants';
@@ -31,7 +29,6 @@ export default function BrowseTutors() {
         const fetchTutors = async () => {
             setLoading(true);
             try {
-                // Determine search parameter appropriately based on our new API features
                 let fetchMethod = tutorService.getAll;
                 let filterParams = {
                     subject: selectedSubjects[0] || '',
@@ -58,7 +55,6 @@ export default function BrowseTutors() {
 
     const filtered = useMemo(() => {
         let results = [...tutors];
-        // Client-side filtering for multiple subjects
         if (selectedSubjects.length > 1) {
             results = results.filter(t => t.subjects?.some(s => selectedSubjects.includes(s)));
         }
@@ -68,67 +64,67 @@ export default function BrowseTutors() {
     const displaySubjects = showMoreSubjects ? SUBJECTS : SUBJECTS.slice(0, 6);
 
     const FilterSidebar = () => (
-        <div className="space-y-6">
+        <div className="space-y-8">
             {/* Search */}
             <div>
-                <label className="text-xs font-bold text-text uppercase tracking-wider mb-2.5 block">Search keywords</label>
-                <div className="relative">
-                    <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+                <label className="text-[11px] font-bold text-muted uppercase tracking-widest mb-3 block">Search keywords</label>
+                <div className="relative group">
+                    <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-primary transition-colors pointer-events-none" />
                     <input
                         type="text"
                         placeholder="Name, subject, college..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-border/60 rounded-xl text-sm transition-all focus:bg-white focus:border-primary focus:shadow-focus outline-none"
+                        className="w-full h-12 pl-11 pr-4 bg-zinc-50/50 backdrop-blur-sm border border-zinc-200/80 rounded-2xl text-[14px] font-medium transition-all shadow-sm focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-zinc-300 outline-none"
                     />
                 </div>
             </div>
 
             {/* Subjects */}
-            <div className="pt-5 border-t border-border/40">
-                <label className="text-xs font-bold text-text uppercase tracking-wider mb-3 block">Subjects</label>
-                <div className="space-y-1.5">
+            <div className="pt-6 border-t border-zinc-100">
+                <label className="text-[11px] font-bold text-muted uppercase tracking-widest mb-4 block">Subjects</label>
+                <div className="flex flex-col gap-1.5">
                     {displaySubjects.map((s) => (
-                        <label key={s.id} className="flex items-center gap-3 cursor-pointer group p-1.5 -mx-1.5 rounded-lg hover:bg-gray-50 transition-colors">
-                            <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
+                        <label key={s.id} className="flex items-center gap-3 cursor-pointer group p-2 -mx-2 rounded-xl hover:bg-zinc-50 active:bg-zinc-100 transition-colors">
+                            <div className="relative flex items-center justify-center w-5 h-5 shrink-0">
                                 <input
                                     type="checkbox"
                                     checked={selectedSubjects.includes(s.id)}
                                     onChange={() => toggleSubject(s.id)}
-                                    className="peer appearance-none w-4 h-4 rounded border-2 border-border/80 checked:bg-primary checked:border-primary transition-all cursor-pointer"
+                                    className="peer appearance-none w-5 h-5 rounded-[6px] border-[1.5px] border-zinc-300 checked:bg-primary checked:border-primary transition-all cursor-pointer shadow-sm hover:border-zinc-400"
                                 />
-                                <svg className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5 7.5 5.5 10.5 11.5 3.5"/></svg>
+                                <svg className="absolute w-3 h-3 text-white pointer-events-none scale-50 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-all duration-200" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5 7.5 5.5 10.5 11.5 3.5"/></svg>
                             </div>
-                            <span className="text-sm font-medium text-text group-hover:text-primary transition-colors">{s.emoji} {s.name}</span>
+                            <span className="text-[14.5px] font-medium text-zinc-700 group-hover:text-zinc-950 transition-colors">{s.emoji} {s.name}</span>
                         </label>
                     ))}
                     <button
                         onClick={() => setShowMoreSubjects(!showMoreSubjects)}
-                        className="text-xs font-bold text-primary hover:text-primary-dark mt-2 pt-1 inline-flex items-center gap-1"
+                        className="text-[13px] font-bold text-primary hover:text-primary-dark mt-2 p-2 -ml-2 inline-flex items-center gap-1.5 rounded-lg hover:bg-primary/5 transition-colors w-fit"
                     >
                         {showMoreSubjects ? 'Hide subjects' : 'View all subjects'}
-                        <ArrowUpDown size={12} className={showMoreSubjects ? 'rotate-180 transition-transform' : 'transition-transform'} />
+                        <ArrowUpDown size={14} className={showMoreSubjects ? 'rotate-180 transition-transform' : 'transition-transform'} />
                     </button>
                 </div>
             </div>
 
             {/* Rating */}
-            <div className="pt-5 border-t border-border/40">
-                <label className="text-xs font-bold text-text uppercase tracking-wider mb-3 block">Minimum rating</label>
-                <div className="bg-gray-50 rounded-xl p-3 border border-border/40 text-center">
-                    <StarRating rating={minRating} interactive onChange={setMinRating} size={22} className="justify-center mb-1" />
+            <div className="pt-6 border-t border-zinc-100">
+                <label className="text-[11px] font-bold text-muted uppercase tracking-widest mb-4 block">Minimum rating</label>
+                <div className="bg-white rounded-2xl p-4 border border-zinc-100 shadow-[0_2px_8px_rgba(0,0,0,0.02)] ring-1 ring-black/[0.02] text-center flex flex-col items-center justify-center group hover:border-zinc-200 transition-colors">
+                    <StarRating rating={minRating} interactive onChange={setMinRating} size={24} className="justify-center mb-1.5 transition-transform group-hover:scale-[1.02]" />
                     {minRating > 0 ? (
-                        <p className="text-[11px] font-semibold text-primary">{minRating}.0 and above</p>
+                        <p className="text-[12px] font-bold text-primary bg-primary/5 px-3 py-1 rounded-full mt-1.5 inline-block">{minRating}.0 and above</p>
                     ) : (
-                        <p className="text-[11px] font-medium text-muted">Any rating</p>
+                        <p className="text-[12px] font-medium text-zinc-400 mt-1.5">Any rating</p>
                     )}
                 </div>
             </div>
 
             {/* Toggles */}
-            <div className="pt-5 border-t border-border/40 space-y-4">
-                <label className="flex items-center justify-between cursor-pointer group">
-                    <span className="text-sm font-bold text-text group-hover:text-primary transition-colors">Online right now</span>
+            <div className="pt-6 border-t border-zinc-100 space-y-4">
+                <label className="flex items-center justify-between cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-zinc-50 transition-colors">
+                    <span className="text-[14.5px] font-semibold text-zinc-700 group-hover:text-zinc-950 transition-colors">Online right now</span>
                     <Toggle checked={onlineOnly} onChange={setOnlineOnly} />
                 </label>
             </div>
@@ -138,60 +134,60 @@ export default function BrowseTutors() {
     return (
         <PageWrapper>
             {/* Header section */}
-            <div className="max-w-6xl mx-auto mb-6 sm:mb-8 mt-2">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="max-w-6xl mx-auto mb-8 sm:mb-12 mt-4 px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-3xl font-display text-text mb-2">Find your next Tutor</h1>
-                        <p className="text-sm text-muted">Browse {filtered.length} verified tutors ready to help you learn faster.</p>
+                        <h1 className="text-4xl md:text-5xl font-display text-zinc-950 mb-3 tracking-tight">Find your next Tutor</h1>
+                        <p className="text-[15px] font-medium text-zinc-500 max-w-lg">Browse {filtered.length} verified experts ready to accelerate your learning journey today.</p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
                         <button 
-                            className="lg:hidden h-10 px-4 rounded-xl border border-border/80 bg-white font-semibold text-sm flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all outline-none"
+                            className="lg:hidden h-11 px-5 rounded-xl border border-zinc-200 bg-white font-bold text-[13px] text-zinc-700 flex items-center gap-2 hover:bg-zinc-50 hover:text-zinc-950 active:scale-95 transition-all outline-none shadow-sm"
                             onClick={() => setShowMobileFilters(true)}
                         >
                             <Filter size={16} /> Filters
                         </button>
                         
-                        <div className="relative shrink-0 w-full sm:w-[200px]">
+                        <div className="relative shrink-0 w-full md:w-[220px]">
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="w-full h-10 pl-10 pr-8 bg-white border border-border/80 rounded-xl text-sm font-semibold text-text appearance-none outline-none focus:border-primary focus:shadow-focus cursor-pointer transition-colors"
+                                className="w-full h-11 pl-11 pr-10 bg-white border border-zinc-200 rounded-xl text-[14px] font-semibold text-zinc-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all hover:bg-zinc-50 cursor-pointer"
                             >
                                 <option value="sessions">Most Experienced</option>
                                 <option value="rating">Highest Rated</option>
                             </select>
-                            <SlidersHorizontal size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
-                            <ChevronDownIcon className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none w-4 h-4" />
+                            <SlidersHorizontal size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                            <ChevronDownIcon className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none w-4 h-4" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="flex gap-8 max-w-6xl mx-auto page-enter">
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 max-w-6xl mx-auto page-enter px-4 sm:px-6 lg:px-8 pb-12">
                 {/* Desktop Sidebar */}
                 <aside className="hidden lg:block w-[280px] shrink-0">
-                    <div className="card-premium sticky top-[100px] shadow-lg border-border/40">
+                    <div className="sticky top-[100px] bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-100">
                         <FilterSidebar />
                     </div>
                 </aside>
 
                 {/* Mobile Filter Sheet */}
                 {showMobileFilters && (
-                    <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={() => setShowMobileFilters(false)} />
-                        <div className="relative w-full max-w-[320px] bg-white h-full flex flex-col shadow-2xl animate-slide-left">
-                            <div className="p-5 border-b border-border/60 flex items-center justify-between bg-gray-50">
-                                <h3 className="font-bold text-lg text-text flex items-center gap-2"><Filter size={18}/> Filters</h3>
-                                <button onClick={() => setShowMobileFilters(false)} className="p-2 -mr-2 text-muted hover:text-text rounded-full hover:bg-black/5 transition-colors">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    <div className="fixed inset-0 z-[100] lg:hidden flex justify-end">
+                        <div className="absolute inset-0 bg-zinc-950/20 backdrop-blur-sm animate-fade-in" onClick={() => setShowMobileFilters(false)} />
+                        <div className="relative w-full max-w-[340px] bg-white h-full flex flex-col shadow-2xl animate-slide-left rounded-l-3xl overflow-hidden ring-1 ring-zinc-200/50">
+                            <div className="p-6 border-b border-zinc-100 flex items-center justify-between bg-white/80 backdrop-blur-xl z-10">
+                                <h3 className="font-display text-xl text-zinc-950 tracking-tight flex items-center gap-2"><Filter size={20} className="text-primary"/> Filters</h3>
+                                <button onClick={() => setShowMobileFilters(false)} className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-zinc-950 rounded-full hover:bg-zinc-100 transition-colors">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
                                 </button>
                             </div>
-                            <div className="p-5 overflow-y-auto flex-1">
+                            <div className="p-6 overflow-y-auto flex-1 bg-zinc-50/50">
                                 <FilterSidebar />
                             </div>
-                            <div className="p-5 border-t border-border/60 bg-gray-50">
-                                <button className="btn-primary w-full h-12 text-sm rounded-xl" onClick={() => setShowMobileFilters(false)}>
+                            <div className="p-6 border-t border-zinc-100 bg-white">
+                                <button className="w-full h-12 bg-primary hover:bg-primary-dark text-white text-[14px] font-bold rounded-xl shadow-md transition-all active:scale-[0.98]" onClick={() => setShowMobileFilters(false)}>
                                     Show {filtered.length} Teachers
                                 </button>
                             </div>
@@ -202,27 +198,28 @@ export default function BrowseTutors() {
                 {/* Main Content */}
                 <main className="flex-1 min-w-0">
                     {loading ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[1,2,3,4].map(i => (
-                                <div key={i} className="card-premium p-6 space-y-4 shadow-sm border border-border/40">
-                                    <div className="flex gap-4"><div className="skeleton w-16 h-16 rounded-full" /><div className="flex-1 space-y-2.5 pt-1"><div className="skeleton h-4 w-3/4" /><div className="skeleton h-3 w-1/2" /></div></div>
-                                    <div className="skeleton h-8 w-full rounded-lg mt-6" />
+                                <div key={i} className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-100">
+                                    <div className="flex gap-4"><div className="w-16 h-16 rounded-full bg-zinc-100 animate-pulse" /><div className="flex-1 space-y-3 pt-2"><div className="h-4 bg-zinc-100 rounded-md w-3/4 animate-pulse" /><div className="h-3 bg-zinc-50 rounded-md w-1/2 animate-pulse" /></div></div>
+                                    <div className="h-10 bg-zinc-50 rounded-xl w-full mt-8 animate-pulse" />
                                 </div>
                             ))}
                         </div>
                     ) : filtered.length === 0 ? (
-                        <div className="card-premium flex flex-col items-center justify-center py-20 text-center shadow-sm">
-                            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-5 text-4xl shadow-inner border border-border/40">
-                                🔍
+                        <div className="bg-white rounded-3xl flex flex-col items-center justify-center py-24 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-100 overflow-hidden relative">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 pointer-events-none" />
+                            <div className="w-24 h-24 bg-primary/10 text-primary rounded-full flex flex-col items-center justify-center mb-6 shadow-inner ring-4 ring-primary/5 relative z-10">
+                                <Search size={32} strokeWidth={2.5} />
                             </div>
-                            <h3 className="text-xl font-display text-text mb-2">No tutors found</h3>
-                            <p className="text-sm text-muted mb-6 max-w-sm">We couldn't find any tutors matching your current filters. Try adjusting your search criteria.</p>
-                            <button className="btn-outline px-6 py-2.5 rounded-xl text-sm" onClick={() => { setSearch(''); setSelectedSubjects([]); setMinRating(0); setOnlineOnly(false); }}>
+                            <h3 className="text-2xl font-display text-zinc-950 mb-3 tracking-tight relative z-10">No tutors match your search</h3>
+                            <p className="text-[15px] text-zinc-500 mb-8 max-w-sm font-medium relative z-10">We couldn't find any tutors with those exact filters. Try broadening your criteria or selecting fewer subjects.</p>
+                            <button className="h-11 px-6 bg-white border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 rounded-xl text-[14px] font-semibold text-zinc-700 shadow-sm transition-all active:scale-95 relative z-10" onClick={() => { setSearch(''); setSelectedSubjects([]); setMinRating(0); setOnlineOnly(false); }}>
                                 Clear all filters
                             </button>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5 stagger-children pb-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 stagger-children">
                             {filtered.map((t) => (
                                 <div key={t.id} className="animate-slide-up h-full">
                                     <TutorCard tutor={t} />
@@ -236,16 +233,14 @@ export default function BrowseTutors() {
     );
 }
 
-// Chevron Helper icon
 function ChevronDownIcon({ className }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
             <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
     );
 }
 
-// Add animation keyframe not in standard config
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes slideLeft {

@@ -4,8 +4,10 @@ const messageSchema = new mongoose.Schema({
     conversation: { type: mongoose.Schema.Types.ObjectId, ref: 'Conversation', required: true },
     sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     text: { type: String, required: true },
-    type: { type: String, enum: ['text', 'meet-link'], default: 'text' },
+    type: { type: String, enum: ['text', 'meet-link', 'file'], default: 'text' },
     meetLink: { type: String, default: null },
+    fileUrl: { type: String, default: null },
+    fileName: { type: String, default: null },
     read: { type: Boolean, default: false },
 }, {
     timestamps: true,

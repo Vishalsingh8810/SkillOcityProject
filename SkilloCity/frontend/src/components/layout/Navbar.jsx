@@ -47,7 +47,7 @@ export default function Navbar({ transparent = false }) {
                         </button>
                         <button 
                             onClick={() => navigate('/signup')} 
-                            className="h-8 px-4 bg-zinc-900 text-white rounded-md text-[13px] font-medium hover:bg-zinc-800 transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+                            className="h-8 px-4 bg-primary text-white rounded-md text-[13px] font-bold hover:bg-primary-dark transition-colors shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         >
                             Sign Up
                         </button>
@@ -75,7 +75,7 @@ export default function Navbar({ transparent = false }) {
                     )}
                     <div className="flex flex-col gap-3">
                         <button onClick={() => { navigate('/login'); setMobileOpen(false); }} className="w-full h-10 border border-border rounded-md text-sm font-medium text-text bg-white shadow-sm">Log in</button>
-                        <button onClick={() => { navigate('/signup'); setMobileOpen(false); }} className="w-full h-10 bg-zinc-900 text-white rounded-md text-sm font-medium shadow-sm">Sign Up</button>
+                        <button onClick={() => { navigate('/signup'); setMobileOpen(false); }} className="w-full h-10 bg-primary hover:bg-primary-dark text-white rounded-md text-sm font-bold shadow-sm transition-colors">Sign Up</button>
                     </div>
                 </div>
             )}
