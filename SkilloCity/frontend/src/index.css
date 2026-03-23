@@ -30,6 +30,26 @@
   --shadow-focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #09090B;
 }
 
+/* ─── Dark Mode ─── */
+html.dark {
+  --primary: #FAFAFA;
+  --primary-dark: #FFFFFF;
+  --primary-light: #27272A;
+
+  --bg: #09090B;
+  --surface: #18181B;
+
+  --text: #FAFAFA;
+  --muted: #A1A1AA;
+
+  --border: #3F3F46;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-focus: 0 0 0 2px #18181B, 0 0 0 4px #FAFAFA;
+}
+
 * {
   margin: 0;
   padding: 0;

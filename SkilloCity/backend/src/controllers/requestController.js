@@ -8,6 +8,17 @@ export const getRequests = async (req, res, next) => {
         const { subject, urgency, sortBy } = req.query;
         let filter = { status: 'pending' };
 
+        // Teachers only see requests targeted at them OR open requests (no target)
+        if (req.user.role === 'teacher') {
+            filter.$or = [
+                { targetTutor: req.user._id },
+                { targetTutor: null },
+            ];
+        } else {
+            // Students see only their own requests
+            filter.student = req.user._id;
+        }
+
         if (subject) filter.subject = subject;
         if (urgency) filter.urgency = urgency;
 

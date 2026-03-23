@@ -1,25 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import Toggle from '../../components/common/Toggle';
 import Button from '../../components/common/Button';
 import Dropdown from '../../components/common/Dropdown';
+import profileService from '../../services/profileService';
+import { useAuthContext } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
+    const { user, updateUser, logout } = useAuthContext();
+
     const [settings, setSettings] = useState({
-        emailNotifications: true,
-        pushNotifications: true,
-        sessionReminders: true,
-        newRequestAlerts: true,
-        messageNotifications: true,
-        darkMode: false,
-        language: 'en',
-        availability: 'online',
+        emailNotifications: user?.settings?.emailNotifications ?? true,
+        pushNotifications: user?.settings?.pushNotifications ?? true,
+        sessionReminders: user?.settings?.sessionReminders ?? true,
+        newRequestAlerts: user?.settings?.newRequestAlerts ?? true,
+        messageNotifications: user?.settings?.messageNotifications ?? true,
+        darkMode: user?.settings?.darkMode ?? false,
+        language: user?.settings?.language ?? 'en',
+        availability: user?.settings?.availability ?? 'online',
     });
+
+    // Apply dark mode class on mount and whenever it changes
+    useEffect(() => {
+        if (settings.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [settings.darkMode]);
 
     const update = (key, value) => setSettings(prev => ({ ...prev, [key]: value }));
 
-    const handleSave = () => toast.success('Settings saved! ✅');
+    const handleSave = async () => {
+        try {
+            await profileService.updateSettings(settings);
+            updateUser({ settings: { ...user?.settings, ...settings } });
+            toast.success('Settings saved! ✅');
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to save settings');
+        }
+    };
+
+    const handleLogout = async () => {
+        await logout();
+        window.location.href = '/login';
+    };
+
     const handleDeleteAccount = () => toast.error('This action cannot be undone');
 
     return (
@@ -29,8 +56,8 @@ export default function SettingsPage() {
                 <p className="text-sm text-muted mb-8">Manage your account preferences</p>
 
                 {/* Notifications */}
-                <section className="bg-white rounded-lg border border-border p-6 mb-6">
-                    <h2 className="text-lg font-semibold text-text mb-4">🔔 Notifications</h2>
+                <section className="bg-white dark:bg-zinc-900 rounded-lg border border-border dark:border-zinc-700 p-6 mb-6">
+                    <h2 className="text-lg font-semibold text-text dark:text-white mb-4">🔔 Notifications</h2>
                     <div className="space-y-4">
                         <Toggle label="Email Notifications" description="Receive important updates via email" checked={settings.emailNotifications} onChange={(v) => update('emailNotifications', v)} />
                         <Toggle label="Push Notifications" description="Get real-time push alerts" checked={settings.pushNotifications} onChange={(v) => update('pushNotifications', v)} />
@@ -41,10 +68,10 @@ export default function SettingsPage() {
                 </section>
 
                 {/* Appearance */}
-                <section className="bg-white rounded-lg border border-border p-6 mb-6">
-                    <h2 className="text-lg font-semibold text-text mb-4">🎨 Appearance</h2>
+                <section className="bg-white dark:bg-zinc-900 rounded-lg border border-border dark:border-zinc-700 p-6 mb-6">
+                    <h2 className="text-lg font-semibold text-text dark:text-white mb-4">🎨 Appearance</h2>
                     <div className="space-y-4">
-                        <Toggle label="Dark Mode" description="Switch to dark theme (coming soon)" checked={settings.darkMode} onChange={(v) => update('darkMode', v)} />
+                        <Toggle label="Dark Mode" description="Switch to dark theme" checked={settings.darkMode} onChange={(v) => update('darkMode', v)} />
                         <Dropdown
                             label="Language"
                             options={[
@@ -58,8 +85,8 @@ export default function SettingsPage() {
                 </section>
 
                 {/* Availability */}
-                <section className="bg-white rounded-lg border border-border p-6 mb-6">
-                    <h2 className="text-lg font-semibold text-text mb-4">🟢 Availability</h2>
+                <section className="bg-white dark:bg-zinc-900 rounded-lg border border-border dark:border-zinc-700 p-6 mb-6">
+                    <h2 className="text-lg font-semibold text-text dark:text-white mb-4">🟢 Availability</h2>
                     <div className="flex gap-3">
                         {[
                             { id: 'online', label: 'Online', color: '#10B981' },
@@ -83,7 +110,7 @@ export default function SettingsPage() {
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Button variant="accent" fullWidth onClick={handleSave}>Save Settings</Button>
-                    <Button variant="ghost" fullWidth onClick={() => toast('Logged out')}>Logout</Button>
+                    <Button variant="ghost" fullWidth onClick={handleLogout}>Logout</Button>
                 </div>
 
                 {/* Danger Zone */}

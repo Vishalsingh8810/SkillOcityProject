@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Search, Edit3, MessageSquare, ArrowLeft } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
@@ -10,21 +10,34 @@ import ChatInput from '../../components/messaging/ChatInput';
 import Spinner from '../../components/common/Spinner';
 import messageService from '../../services/messageService';
 import { useAuthContext } from '../../context/AuthContext';
+import { useSocketContext } from '../../context/SocketContext';
 import { formatRelativeTime, truncateText } from '../../utils/formatters';
 
 export default function MessagesPage() {
     const { conversationId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuthContext();
+    const { emit, on, off, connected } = useSocketContext();
     const [conversations, setConversations] = useState([]);
     const [activeConvId, setActiveConvId] = useState(conversationId || null);
     const [searchQuery, setSearchQuery] = useState('');
     const [messages, setMessages] = useState({});
     const [loading, setLoading] = useState(true);
     const [showSidebarOnMobile, setShowSidebarOnMobile] = useState(!conversationId);
+    const messagesEndRef = useRef(null);
 
     const currentUserId = user?.id;
 
+    // Auto-scroll to bottom when messages change
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, activeConvId, scrollToBottom]);
+
+    // Fetch conversations on mount
     useEffect(() => {
         const fetchConversations = async () => {
             try {
@@ -59,6 +72,49 @@ export default function MessagesPage() {
         }
     }, [activeConvId]);
 
+    // Listen for real-time messages via Socket.io
+    useEffect(() => {
+        if (!connected) return;
+
+        const handleNewMessage = (msg) => {
+            const convId = msg.conversation || msg.conversationId;
+            if (!convId) return;
+
+            setMessages(prev => {
+                const existing = prev[convId] || [];
+                // Avoid duplicates
+                if (existing.some(m => m.id === msg.id)) return prev;
+                return { ...prev, [convId]: [...existing, msg] };
+            });
+
+            // Update conversation list's last message
+            setConversations(prev => prev.map(c => {
+                if (c.id === convId) {
+                    return {
+                        ...c,
+                        lastMessage: msg.text,
+                        lastMessageTime: msg.createdAt || new Date().toISOString(),
+                        unreadCount: convId === activeConvId ? c.unreadCount : (c.unreadCount || 0) + 1,
+                    };
+                }
+                return c;
+            }));
+        };
+
+        on('message:receive', handleNewMessage);
+        return () => off('message:receive', handleNewMessage);
+    }, [connected, on, off, activeConvId]);
+
+    // Mark messages as read when opening a conversation
+    useEffect(() => {
+        if (!activeConvId || !connected) return;
+        emit('message:read', { conversationId: activeConvId });
+        // Clear unread count locally
+        setConversations(prev => prev.map(c =>
+            c.id === activeConvId ? { ...c, unreadCount: 0 } : c
+        ));
+    }, [activeConvId, connected, emit]);
+
     const activeConv = conversations.find(c => c.id === activeConvId);
     const activeMessages = messages[activeConvId] || [];
 
@@ -67,14 +123,42 @@ export default function MessagesPage() {
     );
 
     const handleSend = async (text) => {
-        try {
-            const newMsg = await messageService.sendMessage(activeConvId, text);
-            setMessages(prev => ({
-                ...prev,
-                [activeConvId]: [...(prev[activeConvId] || []), newMsg],
-            }));
-        } catch (err) {
-            console.error('Error sending message:', err);
+        if (!text.trim()) return;
+
+        // Send via Socket.io for real-time delivery
+        if (connected) {
+            emit('message:send', { conversationId: activeConvId, text, type: 'text' });
+        } else {
+            // Fallback to HTTP
+            try {
+                const newMsg = await messageService.sendMessage(activeConvId, text);
+                setMessages(prev => ({
+                    ...prev,
+                    [activeConvId]: [...(prev[activeConvId] || []), newMsg],
+                }));
+            } catch (err) {
+                console.error('Error sending message:', err);
+            }
+        }
+    };
+
+    const handleCreateMeetLink = (meetLink) => {
+        const text = `📹 Join my meet room: ${meetLink}`;
+        if (connected) {
+            emit('message:send', {
+                conversationId: activeConvId,
+                text,
+                type: 'meet-link',
+                meetLink,
+            });
+        } else {
+            // Fallback to HTTP
+            messageService.sendMessage(activeConvId, text).then(newMsg => {
+                setMessages(prev => ({
+                    ...prev,
+                    [activeConvId]: [...(prev[activeConvId] || []), newMsg],
+                }));
+            }).catch(err => console.error('Error sending meet link:', err));
         }
     };
 
@@ -193,8 +277,8 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Messages area */}
-                            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-2 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" style={{ backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
-                                {/* Welcome message / Date separator mock */}
+                            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-2" style={{ backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
+                                {/* Welcome message */}
                                 <div className="flex justify-center my-6">
                                     <span className="px-3 py-1 bg-white border border-border/40 rounded-full text-[10px] font-bold text-muted uppercase tracking-widest shadow-sm">
                                         Conversation Started
@@ -202,13 +286,14 @@ export default function MessagesPage() {
                                 </div>
 
                                 {activeMessages.map((msg, idx) => {
-                                    // Slight margin tweaks if previous message was from same user
                                     const prevMsg = idx > 0 ? activeMessages[idx - 1] : null;
-                                    const isSameAsPrev = prevMsg && prevMsg.senderId === msg.senderId;
+                                    const isSameAsPrev = prevMsg && (prevMsg.senderId || prevMsg.sender) === (msg.senderId || msg.sender);
                                     
+                                    const msgSenderId = msg.senderId || msg.sender;
+
                                     if (msg.type === 'meet-link') {
                                         return (
-                                            <div key={msg.id} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'} ${isSameAsPrev ? 'mt-1' : 'mt-4'}`}>
+                                            <div key={msg.id} className={`flex ${msgSenderId === currentUserId ? 'justify-end' : 'justify-start'} ${isSameAsPrev ? 'mt-1' : 'mt-4'}`}>
                                                 <MeetLinkCard meetLink={msg.meetLink} />
                                             </div>
                                         );
@@ -217,13 +302,14 @@ export default function MessagesPage() {
                                         <div key={msg.id} className={isSameAsPrev ? 'mt-1' : 'mt-4'}>
                                             <MessageBubble
                                                 message={msg}
-                                                isSent={msg.senderId === currentUserId}
-                                                senderName={msg.senderId === currentUserId ? 'You' : activeConv.with.name}
+                                                isSent={msgSenderId === currentUserId}
+                                                senderName={msgSenderId === currentUserId ? 'You' : activeConv.with.name}
                                                 showAvatar={!isSameAsPrev}
                                             />
                                         </div>
                                     );
                                 })}
+                                <div ref={messagesEndRef} />
                             </div>
 
                             {/* Input Area */}
@@ -232,7 +318,7 @@ export default function MessagesPage() {
                                     <QuickReplies onSelect={handleQuickReply} />
                                 </div>
                                 <div className="p-4">
-                                    <ChatInput onSend={handleSend} />
+                                    <ChatInput onSend={handleSend} onCreateMeetLink={handleCreateMeetLink} />
                                 </div>
                             </div>
                         </>

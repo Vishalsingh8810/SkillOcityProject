@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Send, Paperclip, Smile } from 'lucide-react';
+import { Send, Paperclip, Smile, Video } from 'lucide-react';
 
-export default function ChatInput({ onSend, className = '' }) {
+export default function ChatInput({ onSend, onCreateMeetLink, className = '' }) {
     const [text, setText] = useState('');
 
     const handleSend = () => {
@@ -17,10 +17,25 @@ export default function ChatInput({ onSend, className = '' }) {
         }
     };
 
+    const handleCreateRoom = () => {
+        const roomId = `${Math.random().toString(36).substring(2, 5)}-${Math.random().toString(36).substring(2, 6)}-${Math.random().toString(36).substring(2, 5)}`;
+        const meetLink = `https://meet.google.com/${roomId}`;
+        if (onCreateMeetLink) {
+            onCreateMeetLink(meetLink);
+        }
+    };
+
     return (
         <div className={`flex items-center gap-2 p-3 bg-white border-t border-border ${className}`}>
             <button className="p-2 text-muted hover:text-primary transition-colors rounded-md hover:bg-primary-light">
                 <Paperclip size={18} />
+            </button>
+            <button
+                onClick={handleCreateRoom}
+                title="Create Meet Room"
+                className="p-2 text-muted hover:text-green-600 transition-colors rounded-md hover:bg-green-50"
+            >
+                <Video size={18} />
             </button>
             <input
                 type="text"

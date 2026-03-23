@@ -16,6 +16,22 @@ export function AuthProvider({ children }) {
             setToken(savedToken);
         }
         setLoading(false);
+
+        const handleStorageChange = (e) => {
+            if (e.key === 'skillocity_token' || e.key === 'skillocity_user') {
+                const refreshedUser = authService.getCurrentUser();
+                const refreshedToken = authService.getToken();
+                if (refreshedUser && refreshedToken) {
+                    setUser(refreshedUser);
+                    setToken(refreshedToken);
+                } else {
+                    setUser(null);
+                    setToken(null);
+                }
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
     }, []);
 
     const login = async (email, password) => {

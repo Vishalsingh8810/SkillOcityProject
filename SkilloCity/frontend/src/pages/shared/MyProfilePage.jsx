@@ -14,7 +14,7 @@ import profileService from '../../services/profileService';
 import toast from 'react-hot-toast';
 
 export default function MyProfilePage() {
-    const { user } = useAuthContext();
+    const { user, updateUser } = useAuthContext();
     const [activeTab, setActiveTab] = useState('overview');
     const [isEditing, setIsEditing] = useState(false);
     
@@ -97,7 +97,17 @@ export default function MyProfilePage() {
                                         <Camera size={24} />
                                         <span className="text-[10px] font-bold uppercase tracking-wider">Update</span>
                                     </div>
-                                    <input type="file" className="hidden" accept="image/*" onChange={() => toast.success('Avatar updated!')} />
+                                    <input type="file" className="hidden" accept="image/*" onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        try {
+                                            const result = await profileService.uploadAvatar(file);
+                                            updateUser({ avatar: result.url });
+                                            toast.success('Avatar updated!');
+                                        } catch (err) {
+                                            toast.error(err.response?.data?.message || 'Failed to upload avatar');
+                                        }
+                                    }} />
                                 </label>
                                 {/* Online indicator */}
                                 <span className="absolute bottom-2 right-2 w-6 h-6 bg-success-light rounded-full border-4 border-white shadow-sm flex items-center justify-center">

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import RoleRoute from './RoleRoute';
 import Spinner from '../components/common/Spinner';
+import ErrorBoundary from '../components/common/ErrorBoundary';
 
 // Lazy load pages
 const LandingPage = lazy(() => import('../pages/public/LandingPage'));
@@ -30,6 +31,7 @@ const Loading = () => (
 
 export default function AppRoutes() {
     return (
+        <ErrorBoundary>
         <Suspense fallback={<Loading />}>
             <Routes>
                 {/* Public */}
@@ -59,5 +61,6 @@ export default function AppRoutes() {
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </Suspense>
+        </ErrorBoundary>
     );
 }
